@@ -1,0 +1,22 @@
+.left-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 30vw;
+  padding-top: 0;
+}
+.unordered-list {
+  padding-left: 0;
+}
+.link-style {
+  text-decoration: none;
+  color: #383838;
+}
+.list-style {
+  display: flex;
+  list-style: none;
+  align-items: center;
+}
+.list-item {
+  margin-left: 20px;
+}
