@@ -34,7 +34,12 @@ const Header = props => (
         <nav className={`navbar-container ${backgroundColor}`}>
           <img className="header-logo" src={logoUrl} alt="website logo" />
           <div className="navbar-container">
-            <button className="button" onClick={onChangeTheme} type="button">
+            <button
+              className="button"
+              data-testid="theme"
+              onClick={onChangeTheme}
+              type="button"
+            >
               {themeIcon}
             </button>
             <img
