@@ -3,7 +3,6 @@ import {IoMdHome} from 'react-icons/io'
 import {FaGamepad} from 'react-icons/fa'
 import {HiFire} from 'react-icons/hi'
 import {MdPlaylistAdd} from 'react-icons/md'
-import {formatDistanceToNow} from 'date-fns'
 import {Component} from 'react'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
@@ -42,7 +41,7 @@ const apiUrlStatusConstant = {
   failure: 'FAILURE',
 }
 
-class Trending extends Component {
+class Gaming extends Component {
   state = {
     videoList: [],
     apiStatus: apiUrlStatusConstant.initial,
@@ -72,17 +71,17 @@ class Trending extends Component {
             </ListElement>
           </Link>
           <Link className="link-style" to="/trending">
-            <ListElement bgColor={bgColorForListElement}>
-              <HiFire color="red" />
-              <ListItem isDark={isDark} fontWeight="bold">
-                Trending
-              </ListItem>
+            <ListElement>
+              <HiFire color={color} />
+              <ListItem isDark={isDark}>Trending</ListItem>
             </ListElement>
           </Link>
           <Link className="link-style" to="/gaming">
-            <ListElement>
-              <FaGamepad color={color} />
-              <ListItem isDark={isDark}>Gaming</ListItem>
+            <ListElement bgColor={bgColorForListElement}>
+              <FaGamepad color="red" />
+              <ListItem isDark={isDark} fontWeight="bold">
+                Gaming
+              </ListItem>
             </ListElement>
           </Link>
           <Link className="link-style" to="/saved-videos">
@@ -124,27 +123,27 @@ class Trending extends Component {
   getData = async () => {
     this.setState({apiStatus: apiUrlStatusConstant.inProgress})
     const jwtToken = Cookies.get('jwt_token')
-    const apiUrl = 'https://apis.ccbp.in/videos/trending'
+    const apiGameUrl = 'https://apis.ccbp.in/videos/gaming'
     const option = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
       method: 'GET',
     }
-    const fetchedData = await fetch(apiUrl, option)
-    const data = await fetchedData.json()
-    if (fetchedData.ok) {
-      const updatedData = data.videos.map(eachVideo => ({
-        channel: eachVideo.channel,
+
+    const fetchedGameData = await fetch(apiGameUrl, option)
+    const gameData = await fetchedGameData.json()
+
+    if (fetchedGameData.ok) {
+      const updatedGameData = gameData.videos.map(eachVideo => ({
         id: eachVideo.id,
-        publishedAt: eachVideo.published_at,
         thumbnailUrl: eachVideo.thumbnail_url,
         viewCount: eachVideo.view_count,
         title: eachVideo.title,
       }))
-      console.log(updatedData)
+      console.log(updatedGameData)
       this.setState({
-        videoList: updatedData,
+        videoList: updatedGameData,
         apiStatus: apiUrlStatusConstant.success,
       })
     } else {
@@ -152,6 +151,35 @@ class Trending extends Component {
         apiStatus: apiUrlStatusConstant.failure,
       })
     }
+  }
+
+  renderSuccess = isDark => {
+    const {videoList} = this.state
+    return (
+      <VideoUnorderedList>
+        {videoList.map(eachVideo => {
+          const {id} = eachVideo
+          const titleColor = isDark ? '#ffffff' : '#212121'
+          const textColor = isDark ? '#94a3b8' : '#64748b'
+          return (
+            <Link className="link-style" to={`/videos/${id}`}>
+              <VideoListItem key={eachVideo.id}>
+                <VideoThumbNail
+                  src={eachVideo.thumbnailUrl}
+                  alt="video thumbnail"
+                />
+                <TextContainer>
+                  <Title color={titleColor}>{eachVideo.title}</Title>
+                  <Text color={textColor}>
+                    {eachVideo.viewCount} Watching Worldwide
+                  </Text>
+                </TextContainer>
+              </VideoListItem>
+            </Link>
+          )
+        })}
+      </VideoUnorderedList>
+    )
   }
 
   renderLoader = isDark => {
@@ -184,41 +212,6 @@ class Trending extends Component {
     )
   }
 
-  renderSuccess = isDark => {
-    const {videoList} = this.state
-
-    return (
-      <VideoUnorderedList>
-        {videoList.map(eachVideo => {
-          const timeDifference = formatDistanceToNow(
-            new Date(eachVideo.publishedAt),
-          )
-          const {id} = eachVideo
-          const titleColor = isDark ? '#ffffff' : '#212121'
-          const textColor = isDark ? '#94a3b8' : '#64748b'
-
-          return (
-            <Link className="link-style" to={`/videos/${id}`}>
-              <VideoListItem key={eachVideo.id}>
-                <VideoThumbNail
-                  src={eachVideo.thumbnailUrl}
-                  alt="video thumbnail"
-                />
-                <TextContainer>
-                  <Title color={titleColor}>{eachVideo.title}</Title>
-                  <Text color={textColor}>{eachVideo.channel.name}</Text>
-                  <Text color={textColor}>
-                    {eachVideo.viewCount} views {timeDifference} ago
-                  </Text>
-                </TextContainer>
-              </VideoListItem>
-            </Link>
-          )
-        })}
-      </VideoUnorderedList>
-    )
-  }
-
   renderApiData = isDark => {
     const {apiStatus} = this.state
 
@@ -241,9 +234,9 @@ class Trending extends Component {
     return (
       <TopContainer bgColor={backgroundColor}>
         <LogoElement bgColor={logoBgColor}>
-          <HiFire />
+          <FaGamepad />
         </LogoElement>
-        <Heading color={colorHeading}>Trending</Heading>
+        <Heading color={colorHeading}>Gaming</Heading>
       </TopContainer>
     )
   }
@@ -278,4 +271,4 @@ class Trending extends Component {
   }
 }
 
-export default Trending
+export default Gaming

@@ -77,9 +77,10 @@ export const TextContainer = styled.div`
   margin-left: 20px;
   width: 400px;
 `
-export const Title = styled.h1`
+export const Title = styled.p`
   color: ${props => props.color};
   font-size: 22px;
+  font-weight: bold;
 `
 
 export const Text = styled.p`
@@ -112,5 +113,30 @@ export const RetryButton = styled.button`
   border: none;
   color: white;
 `
-export const LogoElement = styled.div``
-export const TopContainer = styled.div``
+export const TopContainer = styled.div`
+  height: 150px;
+  background-color: ${props => props.bgColor};
+  display: flex;
+  align-items: center;
+`
+export const LogoElement = styled.div`
+  background-color: ${props => props.bgColor};
+  height: 80px;
+  width: 80px;
+  border-radius: 40px;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  color: red;
+  margin-left: 50px;
+`
+export const Heading = styled.h1`
+  color: ${props => props.color};
+`
+export const LoaderContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`

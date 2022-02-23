@@ -2,6 +2,7 @@ import {Link} from 'react-router-dom'
 import {IoMdHome} from 'react-icons/io'
 import {HiFire} from 'react-icons/hi'
 import {MdPlaylistAdd} from 'react-icons/md'
+import {FaGamepad} from 'react-icons/fa'
 import {formatDistanceToNow} from 'date-fns'
 import {AiOutlineClose, AiOutlineSearch} from 'react-icons/ai'
 import {Component} from 'react'
@@ -39,6 +40,7 @@ import {
   RetryButton,
   Reason,
   EmptyViewContainer,
+  LoaderContainer,
 } from './styledComponent'
 import './index.css'
 
@@ -99,23 +101,27 @@ class Home extends Component {
     }
   }
 
-  renderLoader = () => (
-    <div className="loader-container" data-testid="loader">
-      <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
-    </div>
-  )
+  renderLoader = isDark => {
+    const color = isDark ? '#ffffff' : '#000000'
+    return (
+      <LoaderContainer data-testid="loader">
+        <Loader type="ThreeDots" color={color} height="50" width="50" />
+      </LoaderContainer>
+    )
+  }
 
   renderEmptyView = isDark => {
     const onClickRetry = () => {
       this.setState({apiStatus: apiUrlStatusConstant.inProgress}, this.getData)
     }
+    const color = isDark ? '#ffffff' : '#212121'
     return (
       <EmptyViewContainer>
         <EmptyViewImage
           src="https://assets.ccbp.in/frontend/react-js/nxt-watch-no-search-results-img.png"
           alt="no videos"
         />
-        <HeadingFail>No Search results found</HeadingFail>
+        <HeadingFail color={color}>No Search results found</HeadingFail>
         <Reason>Try different key words or remove search filter</Reason>
         <RetryButton onClick={onClickRetry} type="button">
           Retry
@@ -192,14 +198,14 @@ class Home extends Component {
     )
   }
 
-  renderApiData = isDark => {
+  renderApiData = () => {
     const {apiStatus} = this.state
 
     switch (apiStatus) {
       case apiUrlStatusConstant.success:
-        return this.renderSuccess(isDark)
+        return this.renderSuccess()
       case apiUrlStatusConstant.failure:
-        return this.renderFailure(isDark)
+        return this.renderFailure()
       case apiUrlStatusConstant.inProgress:
         return this.renderLoader()
       default:
@@ -236,7 +242,7 @@ class Home extends Component {
           </Link>
           <Link className="link-style" to="/gaming">
             <ListElement>
-              <IoMdHome color={color} />
+              <FaGamepad color={color} />
               <ListItem isDark={isDark}>Gaming</ListItem>
             </ListElement>
           </Link>
@@ -324,6 +330,7 @@ class Home extends Component {
           const {isDark} = value
           const backgroundColor = isDark ? '#0f0f0f' : '#f8fafc'
           const borderColor = isDark ? ' #606060' : '#d7dfe9'
+          const color = isDark ? '#f1f1f1' : '#212121'
 
           return (
             <>
@@ -339,6 +346,7 @@ class Home extends Component {
                   <RightSideBottomContainer bgColor={backgroundColor}>
                     <SearchBar>
                       <SearchInput
+                        color={color}
                         borderColor={borderColor}
                         type="search"
                         onChange={this.changeSearchInput}

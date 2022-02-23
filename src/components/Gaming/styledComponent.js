@@ -51,100 +51,39 @@ export const ListItem = styled.p`
   font-weight: ${props => props.fontWeight};
   color: ${props => (props.isDark === true ? '#ffffff' : '#383838')};
 `
-export const BannerTitle = styled.p`
-  padding-left: 20px;
-`
-export const BannerLogo = styled.img`
-  height: 35px;
-  width: 150px;
-  margin-top: 40px;
-  padding-left: 20px;
-`
-export const BannerButton = styled.button`
-  border: solid black 1px;
-  color: black;
-  background-color: transparent;
-  height: 36px;
-  width: 120px;
-  margin-left: 20px;
-  font-weight: bold;
-  margin-bottom: 40px;
-`
-export const CloseButton = styled.button`
-  border: none;
-  background-color: transparent;
-  align-self: flex-start;
-  margin: 20px;
-  margin-top: 40px;
-  cursor: pointer;
-`
+
 export const RightSideBottomContainer = styled.div`
   width: 80vw;
   min-height: 100vh;
   background-color: ${props => props.bgColor};
-  padding-left: 20px;
-`
-export const SearchBar = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  height: 36px;
-`
-export const SearchInput = styled.input`
-  height: 36px;
-  outline: none;
-  width: 30vw;
-  border: solid 1px;
-  border-color: ${props => props.borderColor};
-  padding: 10px;
-  background-color: transparent;
-  color: ${props => props.color};
-`
-
-export const SearchButton = styled.button`
-  height: 36px;
-  width: 65px;
-  background-color: transparent;
-  border: solid 1px;
-  border-color: ${props => props.borderColor};
-  color: #909090;
-  font-size: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding-left: 60px;
 `
 export const VideoListItem = styled.li`
   list-style: none;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  margin-top: 40px;
+  width: 220px;
   margin-right: 20px;
-  margin-top: 15px;
-  width: 312px;
-  height: 300px;
 `
-
 export const VideoThumbNail = styled.img`
-  height: 150px;
-  width: 312px;
+  height: 300px;
+  width: 220px;
 `
 export const VideoUnorderedList = styled.div`
   display: flex;
   flex-wrap: wrap;
 `
-export const DetailContainer = styled.div`
-  display: flex;
-`
-export const Logo = styled.img`
-  height: 40px;
-  width: 40px;
-  margin-top: 20px;
-`
 export const TextContainer = styled.div`
-  margin-left: 20px;
-  margin-top: 5px;
+  width: 400px;
 `
 export const Title = styled.p`
+  color: ${props => props.color};
+  font-size: 20px;
+  font-weight: bold;
+`
+
+export const Text = styled.p`
   color: ${props => props.color};
   margin-top: 5px;
   margin-bottom: 5px;
@@ -155,7 +94,6 @@ export const EmptyViewContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 80vw;
-  min-height: 138vh;
 `
 export const EmptyViewImage = styled.img`
   height: 350px;
@@ -163,11 +101,10 @@ export const EmptyViewImage = styled.img`
   margin-top: 20px;
 `
 export const HeadingFail = styled.h1`
-  color: ${props => props.color};
+  color: #212121;
 `
 export const Reason = styled.p`
   color: #7e858e;
-  margin-top: 0;
 `
 export const RetryButton = styled.button`
   height: 36px;
@@ -175,8 +112,28 @@ export const RetryButton = styled.button`
   background-color: #4f46e5;
   border: none;
   color: white;
-  margin-bottom: 30px;
-  cursor: pointer;
+`
+export const TopContainer = styled.div`
+  height: 150px;
+  background-color: ${props => props.bgColor};
+  display: flex;
+  align-items: center;
+`
+export const LogoElement = styled.div`
+  background-color: ${props => props.bgColor};
+  height: 80px;
+  width: 80px;
+  border-radius: 40px;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  color: red;
+  margin-left: 50px;
+`
+export const Heading = styled.h1`
+  color: ${props => props.color};
 `
 export const LoaderContainer = styled.div`
   display: flex;
