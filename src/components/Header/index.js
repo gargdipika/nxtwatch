@@ -1,5 +1,5 @@
 import {BsBrightnessHigh} from 'react-icons/bs'
-import {withRouter} from 'react-router-dom'
+import {withRouter, Link} from 'react-router-dom'
 import Cookies from 'js-cookie'
 import {FaMoon} from 'react-icons/fa'
 import ThemeContext from '../../context/ThemeContext'
@@ -32,7 +32,9 @@ const Header = props => (
       const logoutButton = isDark ? 'logout-button-dark' : 'logout-button-light'
       return (
         <nav className={`navbar-container ${backgroundColor}`}>
-          <img className="header-logo" src={logoUrl} alt="website logo" />
+          <Link to="/">
+            <img className="header-logo" src={logoUrl} alt="website logo" />
+          </Link>
           <div className="navbar-container">
             <button
               className="button"

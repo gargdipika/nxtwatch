@@ -2,7 +2,8 @@ import {Link} from 'react-router-dom'
 import {IoMdHome} from 'react-icons/io'
 import {HiFire} from 'react-icons/hi'
 import {MdPlaylistAdd} from 'react-icons/md'
-import {AiOutlineClose} from 'react-icons/ai'
+import {formatDistanceToNow} from 'date-fns'
+import {AiOutlineClose, AiOutlineSearch} from 'react-icons/ai'
 import {Component} from 'react'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
@@ -22,6 +23,17 @@ import {
   BannerLogo,
   BannerButton,
   CloseButton,
+  RightSideBottomContainer,
+  SearchBar,
+  SearchInput,
+  SearchButton,
+  VideoUnorderedList,
+  VideoThumbNail,
+  VideoListItem,
+  DetailContainer,
+  Logo,
+  TextContainer,
+  Title,
 } from './styledComponent'
 import './index.css'
 
@@ -88,14 +100,53 @@ class Home extends Component {
     </div>
   )
 
-  renderApiData = () => {
+  renderSuccess = isDark => {
+    const {videoList} = this.state
+
+    return (
+      <VideoUnorderedList>
+        {videoList.map(eachVideo => {
+          const timeDifference = formatDistanceToNow(
+            new Date(eachVideo.publishedAt),
+          )
+          const {id} = eachVideo
+
+          return (
+            <Link to={`/videos/${id}`}>
+              <VideoListItem key={eachVideo.id}>
+                <VideoThumbNail
+                  src={eachVideo.thumbnailUrl}
+                  alt="video thumbnail"
+                />
+                <DetailContainer>
+                  <Logo
+                    src={eachVideo.channel.profile_image_url}
+                    alt="channel logo"
+                  />
+                  <TextContainer>
+                    <Title color="#212121">{eachVideo.title}</Title>
+                    <Title color="#64748b">{eachVideo.channel.name}</Title>
+                    <Title color="#64748b">
+                      {eachVideo.viewCount} views {timeDifference} ago
+                    </Title>
+                  </TextContainer>
+                </DetailContainer>
+              </VideoListItem>
+            </Link>
+          )
+        })}
+      </VideoUnorderedList>
+    )
+  }
+
+  renderApiData = isDark => {
     const {apiStatus} = this.state
 
     switch (apiStatus) {
       case apiUrlStatusConstant.success:
-        return this.renderSuccess()
+        return this.renderSuccess(isDark)
       case apiUrlStatusConstant.failure:
-        return this.renderFailure()
+        return this.renderFailure(isDark)
       case apiUrlStatusConstant.inProgress:
         return this.renderLoader()
       default:
@@ -109,7 +160,12 @@ class Home extends Component {
     const bgColorForListElement = isDark ? '#424242' : '#f1f5f9'
 
     return (
-      <SideContainer width={25} isDark={isDark} height={80}>
+      <SideContainer
+        width={20}
+        isDark={isDark}
+        height={80}
+        justifyContent="space-between"
+      >
         <UnorderedList>
           <Link className="link-style" to="/">
             <ListElement bgColor={bgColorForListElement}>
@@ -175,25 +231,36 @@ class Home extends Component {
       : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png'
 
     return (
-      <SideContainer width={75} height={80}>
-        <HomeContainer justifyContent="space-between" bgImage={bannerImage}>
-          <div>
-            <BannerLogo src={bannerLogo} alt="nxt watch logo" />
-            <BannerTitle>
-              Buy Nxt Watch Premium prepaid plans with <br /> UPI
-            </BannerTitle>
-            <BannerButton type="button">GET IT NOW</BannerButton>
-          </div>
-          <CloseButton
-            data-testid="close"
-            onClick={this.removeBanner}
-            type="button"
-          >
-            <AiOutlineClose />
-          </CloseButton>
-        </HomeContainer>
-      </SideContainer>
+      <HomeContainer
+        data-testid="banner"
+        justifyContent="space-between"
+        bgImage={bannerImage}
+      >
+        <div>
+          <BannerLogo src={bannerLogo} alt="nxt watch logo" />
+          <BannerTitle>
+            Buy Nxt Watch Premium prepaid plans with <br /> UPI
+          </BannerTitle>
+          <BannerButton type="button">GET IT NOW</BannerButton>
+        </div>
+        <CloseButton
+          data-testid="close"
+          onClick={this.removeBanner}
+          type="button"
+        >
+          <AiOutlineClose />
+        </CloseButton>
+      </HomeContainer>
     )
+  }
+
+  changeSearchInput = event => {
+    this.setState({searchInput: event.target.value})
+  }
+
+  onClickSearch = () => {
+    const {searchInput} = this.state
+    this.setState({searchInput}, this.getData)
   }
 
   render() {
@@ -202,13 +269,33 @@ class Home extends Component {
       <ThemeContext.Consumer>
         {value => {
           const {isDark} = value
+          const backgroundColor = isDark ? '#0f0f0f' : '#f8fafc'
 
           return (
             <>
               <Header />
-              <HomeContainer>
+              <HomeContainer alignItem="flex-start">
                 {this.renderSideContainer(isDark)}
-                {showBanner && this.renderBanner()}
+                <SideContainer
+                  justifyContent="flex-start"
+                  width={80}
+                  height={80}
+                >
+                  {showBanner && this.renderBanner()}
+                  <RightSideBottomContainer bgColor={backgroundColor}>
+                    <SearchBar>
+                      <SearchInput
+                        type="search"
+                        onChange={this.changeSearchInput}
+                        placeholder="Search"
+                      />
+                      <SearchButton type="button" data-testid="searchButton">
+                        <AiOutlineSearch onClick={this.onClickSearch} />
+                      </SearchButton>
+                    </SearchBar>
+                    {this.renderApiData(isDark)}
+                  </RightSideBottomContainer>
+                </SideContainer>
               </HomeContainer>
             </>
           )
