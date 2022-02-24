@@ -42,6 +42,18 @@ const apiUrlStatusConstant = {
   failure: 'FAILURE',
 }
 
+const sideBarContent = [
+  {id: 0, icon: <IoMdHome />, title: 'Home', link: '/'},
+  {id: 1, icon: <HiFire />, title: 'Trending', link: '/trending'},
+  {id: 2, icon: <FaGamepad />, title: 'Gaming', link: '/gaming'},
+  {
+    id: 3,
+    icon: <MdPlaylistAdd />,
+    title: 'Saved Videos',
+    link: '/saved-videos',
+  },
+]
+
 class Trending extends Component {
   state = {
     videoList: [],
@@ -52,74 +64,72 @@ class Trending extends Component {
     this.getData()
   }
 
-  renderSideContainer = isDark => {
-    console.log(isDark)
-    const color = isDark ? '#606060' : '#383838'
-    const bgColorForListElement = isDark ? '#424242' : '#f1f5f9'
-
-    return (
-      <SideContainer
-        width={20}
-        isDark={isDark}
-        height={80}
-        justifyContent="space-between"
-      >
+  renderSideContainer = isDark => (
+    <SideContainer
+      width={20}
+      isDark={isDark}
+      height={80}
+      justifyContent="space-between"
+    >
+      <nav>
         <UnorderedList>
-          <Link className="link-style" to="/">
-            <ListElement>
-              <IoMdHome color={color} />
-              <ListItem isDark={isDark}>Home</ListItem>
-            </ListElement>
-          </Link>
-          <Link className="link-style" to="/trending">
-            <ListElement bgColor={bgColorForListElement}>
-              <HiFire color="red" />
-              <ListItem isDark={isDark} fontWeight="bold">
-                Trending
-              </ListItem>
-            </ListElement>
-          </Link>
-          <Link className="link-style" to="/gaming">
-            <ListElement>
-              <FaGamepad color={color} />
-              <ListItem isDark={isDark}>Gaming</ListItem>
-            </ListElement>
-          </Link>
-          <Link className="link-style" to="/saved-videos">
-            <ListElement>
-              <MdPlaylistAdd color={color} />
-              <ListItem isDark={isDark}>Saved Videos</ListItem>
-            </ListElement>
-          </Link>
+          {sideBarContent.map(eachContent => {
+            const {icon} = eachContent
+
+            const isClick = eachContent.id === 1
+            let activeBgColor = 'transparent'
+            let activeColor = ''
+            let fontWeight = 'normal'
+            if (isClick) {
+              activeBgColor = isDark ? '#424242' : '#f1f5f9'
+              activeColor = 'red'
+              fontWeight = 'bold'
+            }
+
+            return (
+              <Link className="link-style" to={eachContent.link}>
+                <ListElement
+                  bgColor={activeBgColor}
+                  key={eachContent.id}
+                  color={activeColor}
+                >
+                  {icon}
+                  <ListItem fontWeight={fontWeight}>
+                    {eachContent.title}
+                  </ListItem>
+                </ListElement>
+              </Link>
+            )
+          })}
         </UnorderedList>
+      </nav>
+      <div>
+        <SideBarPara isDark={isDark} className="contact-us">
+          CONTACT US
+        </SideBarPara>
         <div>
-          <SideBarPara isDark={isDark} className="contact-us">
-            CONTACT US
-          </SideBarPara>
-          <div>
-            <MediaLogo
-              className="media-logo"
-              src="https://assets.ccbp.in/frontend/react-js/nxt-watch-facebook-logo-img.png"
-              alt="facebook logo"
-            />
-            <MediaLogo
-              className="media-logo"
-              src="https://assets.ccbp.in/frontend/react-js/nxt-watch-twitter-logo-img.png"
-              alt="twitter logo"
-            />
-            <MediaLogo
-              className="media-logo"
-              src="https://assets.ccbp.in/frontend/react-js/nxt-watch-linked-in-logo-img.png"
-              alt="linked in logo"
-            />
-          </div>
-          <SideBarPara isDark={isDark} className="contact-us">
-            Enjoy! Now to see your channels and recommendations!
-          </SideBarPara>
+          <MediaLogo
+            className="media-logo"
+            src="https://assets.ccbp.in/frontend/react-js/nxt-watch-facebook-logo-img.png"
+            alt="facebook logo"
+          />
+          <MediaLogo
+            className="media-logo"
+            src="https://assets.ccbp.in/frontend/react-js/nxt-watch-twitter-logo-img.png"
+            alt="twitter logo"
+          />
+          <MediaLogo
+            className="media-logo"
+            src="https://assets.ccbp.in/frontend/react-js/nxt-watch-linked-in-logo-img.png"
+            alt="linked in logo"
+          />
         </div>
-      </SideContainer>
-    )
-  }
+        <SideBarPara isDark={isDark} className="contact-us">
+          Enjoy! Now to see your channels and recommendations!
+        </SideBarPara>
+      </div>
+    </SideContainer>
+  )
 
   getData = async () => {
     this.setState({apiStatus: apiUrlStatusConstant.inProgress})

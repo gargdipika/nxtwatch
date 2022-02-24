@@ -57,30 +57,30 @@ export const RightSideBottomContainer = styled.div`
   width: 80vw;
   min-height: 100vh;
   background-color: ${props => props.bgColor};
-  padding-left: 60px;
+  padding-left: 20px;
 `
+
 export const VideoListItem = styled.li`
   list-style: none;
   display: flex;
-  flex-direction: column;
+  margin-left: 40px;
   margin-top: 40px;
-  width: 220px;
-  margin-right: 20px;
 `
 export const VideoThumbNail = styled.img`
-  height: 300px;
-  width: 220px;
+  height: 200px;
+  width: 350px;
 `
 export const VideoUnorderedList = styled.div`
   display: flex;
   flex-wrap: wrap;
 `
 export const TextContainer = styled.div`
+  margin-left: 20px;
   width: 400px;
 `
 export const Title = styled.p`
   color: ${props => props.color};
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
 `
 
@@ -95,10 +95,12 @@ export const EmptyViewContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 80vw;
+  height: 165vh;
+  background-color: ${props => props.bgColor};
 `
 export const EmptyViewImage = styled.img`
-  height: 350px;
-  width: 350px;
+  height: 400px;
+  width: 550px;
   margin-top: 20px;
 `
 export const HeadingFail = styled.h1`
@@ -135,9 +137,4 @@ export const LogoElement = styled.div`
 `
 export const Heading = styled.h1`
   color: ${props => props.color};
-`
-export const LoaderContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `

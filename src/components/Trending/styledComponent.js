@@ -44,6 +44,7 @@ export const ListElement = styled.li`
   align-items: center;
   padding-left: 20px;
   background-color: ${props => props.bgColor};
+  color: ${props => props.color};
 `
 
 export const ListItem = styled.p`

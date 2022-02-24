@@ -1,8 +1,11 @@
 import {Link} from 'react-router-dom'
+import ReactPlayer from 'react-player'
 import {IoMdHome} from 'react-icons/io'
 import {FaGamepad} from 'react-icons/fa'
 import {HiFire} from 'react-icons/hi'
+import {AiOutlineLike, AiOutlineDislike} from 'react-icons/ai'
 import {MdPlaylistAdd} from 'react-icons/md'
+import {formatDistanceToNow} from 'date-fns'
 import {Component} from 'react'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
@@ -17,21 +20,18 @@ import {
   ListElement,
   ListItem,
   RightSideBottomContainer,
-  VideoUnorderedList,
-  VideoThumbNail,
-  VideoListItem,
-  TextContainer,
-  Title,
-  Text,
   EmptyViewImage,
   HeadingFail,
   RetryButton,
   Reason,
   EmptyViewContainer,
-  TopContainer,
-  LogoElement,
-  Heading,
   LoaderContainer,
+  VideoItemDetailContainer,
+  Title,
+  MidContainer,
+  Container,
+  LikeButton,
+  Text,
 } from './styledComponent'
 
 const apiUrlStatusConstant = {
@@ -53,10 +53,94 @@ const sideBarContent = [
   },
 ]
 
-class Gaming extends Component {
+class VideoItemDetail extends Component {
   state = {
-    videoList: [],
+    videoDetail: [],
     apiStatus: apiUrlStatusConstant.initial,
+    isLike: false,
+    isDisLike: false,
+  }
+
+  renderSuccess = (isDark, addToSaveVideos) => {
+    const {videoDetail, isLike, isDisLike} = this.state
+    const timeDifference = formatDistanceToNow(
+      new Date(videoDetail.publishedAt),
+    )
+    const {videoUrl, title} = videoDetail
+    const titleColor = isDark ? '#ffffff' : '#212121'
+    const textColor = isDark ? '#94a3b8' : '#64748b'
+
+    let LikeColor = ''
+    if (isLike) {
+      LikeColor = '#4f46e5'
+    } else {
+      LikeColor = isDark ? '#94a3b8' : '#64748b'
+    }
+
+    const onClickLike = () => {
+      if (isDisLike === true) {
+        this.setState(prevState => ({
+          isLike: !prevState.isLike,
+          isDisLike: false,
+        }))
+      } else {
+        this.setState(prevState => ({isLike: !prevState.isLike}))
+      }
+    }
+
+    let DislikeColor = ''
+    if (isDisLike) {
+      DislikeColor = '#4f46e5'
+    } else {
+      DislikeColor = isDark ? '#94a3b8' : '#64748b'
+    }
+
+    const onClickDisLike = () => {
+      if (isLike === true) {
+        this.setState(prevState => ({
+          isLike: false,
+          isDisLike: !prevState.isDisLike,
+        }))
+      } else {
+        this.setState(prevState => ({isDisLike: !prevState.isDisLike}))
+      }
+    }
+
+    const onClickSave = () => {
+      addToSaveVideos(videoDetail)
+    }
+
+    return (
+      <VideoItemDetailContainer>
+        <ReactPlayer url={videoUrl} width={1000} height={500} controls />
+        <Title color={titleColor}>{title}</Title>
+        <MidContainer>
+          <Text color={textColor}>
+            {videoDetail.viewCount} views . {timeDifference} ago
+          </Text>
+          <MidContainer>
+            <MidContainer onClick={onClickLike}>
+              <AiOutlineLike color={LikeColor} />
+              <LikeButton color={LikeColor} type="button">
+                Like
+              </LikeButton>
+            </MidContainer>
+            <MidContainer onClick={onClickDisLike}>
+              <AiOutlineDislike color={DislikeColor} />
+              <LikeButton color={DislikeColor} type="button">
+                Dislike
+              </LikeButton>
+            </MidContainer>
+            <MidContainer onClick={onClickSave}>
+              <MdPlaylistAdd color={textColor} />
+              <LikeButton type="button" color={textColor}>
+                Save
+              </LikeButton>
+            </MidContainer>
+          </MidContainer>
+        </MidContainer>
+      </VideoItemDetailContainer>
+    )
   }
 
   componentDidMount = () => {
@@ -75,27 +159,11 @@ class Gaming extends Component {
           {sideBarContent.map(eachContent => {
             const {icon} = eachContent
 
-            const isClick = eachContent.id === 2
-            let activeBgColor = 'transparent'
-            let activeColor = ''
-            let fontWeight = 'normal'
-            if (isClick) {
-              activeBgColor = isDark ? '#424242' : '#f1f5f9'
-              activeColor = 'red'
-              fontWeight = 'bold'
-            }
-
             return (
               <Link className="link-style" to={eachContent.link}>
-                <ListElement
-                  bgColor={activeBgColor}
-                  key={eachContent.id}
-                  color={activeColor}
-                >
+                <ListElement key={eachContent.id}>
                   {icon}
-                  <ListItem fontWeight={fontWeight}>
-                    {eachContent.title}
-                  </ListItem>
+                  <ListItem>{eachContent.title}</ListItem>
                 </ListElement>
               </Link>
             )
@@ -131,29 +199,34 @@ class Gaming extends Component {
   )
 
   getData = async () => {
+    const {match} = this.props
+    const {params} = match
+    const {id} = params
+    console.log(id)
     this.setState({apiStatus: apiUrlStatusConstant.inProgress})
     const jwtToken = Cookies.get('jwt_token')
-    const apiGameUrl = 'https://apis.ccbp.in/videos/gaming'
+    const apiVideoItemUrl = `https://apis.ccbp.in/videos/${id}`
     const option = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
       method: 'GET',
     }
-
-    const fetchedGameData = await fetch(apiGameUrl, option)
-    const gameData = await fetchedGameData.json()
-
-    if (fetchedGameData.ok) {
-      const updatedGameData = gameData.videos.map(eachVideo => ({
-        id: eachVideo.id,
-        thumbnailUrl: eachVideo.thumbnail_url,
-        viewCount: eachVideo.view_count,
-        title: eachVideo.title,
-      }))
-      console.log(updatedGameData)
+    const fetchedVideoItem = await fetch(apiVideoItemUrl, option)
+    const videoItemData = await fetchedVideoItem.json()
+    if (fetchedVideoItem.ok) {
+      const updatedVideoData = {
+        channel: videoItemData.video_details.channel,
+        description: videoItemData.video_details.description,
+        id: videoItemData.video_details.id,
+        publishedAt: videoItemData.video_details.published_at,
+        thumbnailUrl: videoItemData.video_details.thumbnail_url,
+        viewCount: videoItemData.video_details.view_count,
+        title: videoItemData.video_details.title,
+        videoUrl: videoItemData.video_details.video_url,
+      }
       this.setState({
-        videoList: updatedGameData,
+        videoDetail: updatedVideoData,
         apiStatus: apiUrlStatusConstant.success,
       })
     } else {
@@ -161,35 +234,6 @@ class Gaming extends Component {
         apiStatus: apiUrlStatusConstant.failure,
       })
     }
-  }
-
-  renderSuccess = isDark => {
-    const {videoList} = this.state
-    return (
-      <VideoUnorderedList>
-        {videoList.map(eachVideo => {
-          const {id} = eachVideo
-          const titleColor = isDark ? '#ffffff' : '#212121'
-          const textColor = isDark ? '#94a3b8' : '#64748b'
-          return (
-            <Link className="link-style" to={`/videos/${id}`}>
-              <VideoListItem key={eachVideo.id}>
-                <VideoThumbNail
-                  src={eachVideo.thumbnailUrl}
-                  alt="video thumbnail"
-                />
-                <TextContainer>
-                  <Title color={titleColor}>{eachVideo.title}</Title>
-                  <Text color={textColor}>
-                    {eachVideo.viewCount} Watching Worldwide
-                  </Text>
-                </TextContainer>
-              </VideoListItem>
-            </Link>
-          )
-        })}
-      </VideoUnorderedList>
-    )
   }
 
   renderLoader = isDark => {
@@ -222,12 +266,12 @@ class Gaming extends Component {
     )
   }
 
-  renderApiData = isDark => {
+  renderApiData = (isDark, addToSaveVideos) => {
     const {apiStatus} = this.state
 
     switch (apiStatus) {
       case apiUrlStatusConstant.success:
-        return this.renderSuccess(isDark)
+        return this.renderSuccess(isDark, addToSaveVideos)
       case apiUrlStatusConstant.failure:
         return this.renderFailure(isDark)
       case apiUrlStatusConstant.inProgress:
@@ -237,25 +281,11 @@ class Gaming extends Component {
     }
   }
 
-  renderTop = isDark => {
-    const backgroundColor = isDark ? '#231f20' : '#ebebeb'
-    const logoBgColor = isDark ? '#181818' : '#d7dfe9'
-    const colorHeading = isDark ? '#ffffff' : '#212121'
-    return (
-      <TopContainer bgColor={backgroundColor}>
-        <LogoElement bgColor={logoBgColor}>
-          <FaGamepad />
-        </LogoElement>
-        <Heading color={colorHeading}>Gaming</Heading>
-      </TopContainer>
-    )
-  }
-
   render() {
     return (
       <ThemeContext.Consumer>
         {value => {
-          const {isDark} = value
+          const {isDark, addToSaveVideos} = value
           const backgroundColor = isDark ? '#0f0f0f' : '#f8fafc'
           return (
             <>
@@ -267,12 +297,11 @@ class Gaming extends Component {
                   width={80}
                   height={80}
                 >
-                  {this.renderTop(isDark)}
                   <RightSideBottomContainer
-                    data-testid="gaming"
+                    data-testid="trending"
                     bgColor={backgroundColor}
                   >
-                    {this.renderApiData(isDark)}
+                    {this.renderApiData(isDark, addToSaveVideos)}
                   </RightSideBottomContainer>
                 </SideContainer>
               </HomeContainer>
@@ -284,4 +313,4 @@ class Gaming extends Component {
   }
 }
 
-export default Gaming
+export default VideoItemDetail
