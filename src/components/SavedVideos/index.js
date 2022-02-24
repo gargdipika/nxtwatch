@@ -74,7 +74,7 @@ class SavedVideos extends Component {
                   color={activeColor}
                 >
                   {icon}
-                  <ListItem fontWeight={fontWeight}>
+                  <ListItem isDark={isDark} fontWeight={fontWeight}>
                     {eachContent.title}
                   </ListItem>
                 </ListElement>

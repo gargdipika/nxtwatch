@@ -101,7 +101,7 @@ class Home extends Component {
                   color={activeColor}
                 >
                   {icon}
-                  <ListItem fontWeight={fontWeight}>
+                  <ListItem isDark={isDark} fontWeight={fontWeight}>
                     {eachContent.title}
                   </ListItem>
                 </ListElement>
@@ -277,16 +277,16 @@ class Home extends Component {
     )
   }
 
-  renderApiData = () => {
+  renderApiData = isDark => {
     const {apiStatus} = this.state
 
     switch (apiStatus) {
       case apiUrlStatusConstant.success:
-        return this.renderSuccess()
+        return this.renderSuccess(isDark)
       case apiUrlStatusConstant.failure:
-        return this.renderFailure()
+        return this.renderFailure(isDark)
       case apiUrlStatusConstant.inProgress:
-        return this.renderLoader()
+        return this.renderLoader(isDark)
       default:
         return null
     }
@@ -352,7 +352,7 @@ class Home extends Component {
                   width={80}
                   height={80}
                 >
-                  {showBanner && this.renderBanner()}
+                  {showBanner && this.renderBanner(isDark)}
                   <RightSideBottomContainer
                     data-testid="home"
                     bgColor={backgroundColor}

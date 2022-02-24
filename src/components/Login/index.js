@@ -56,7 +56,6 @@ class Login extends Component {
       <ThemeContext.Consumer>
         {value => {
           const {isDark} = value
-          console.log(isDark)
           const backgroundColor = isDark ? 'darkBackground' : ''
           const backgroundInner = isDark ? 'darkBackgroundInner' : ''
           const shadow = isDark ? '' : 'box-shadow-for-form'

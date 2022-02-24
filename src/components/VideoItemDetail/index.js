@@ -184,7 +184,7 @@ class VideoItemDetail extends Component {
               <Link className="link-style" to={eachContent.link}>
                 <ListElement key={eachContent.id}>
                   {icon}
-                  <ListItem>{eachContent.title}</ListItem>
+                  <ListItem isDark={isDark}>{eachContent.title}</ListItem>
                 </ListElement>
               </Link>
             )
