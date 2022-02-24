@@ -29,8 +29,9 @@ import {
   VideoItemDetailContainer,
   Title,
   MidContainer,
-  Container,
   LikeButton,
+  TextContainer,
+  Logo,
   Text,
 } from './styledComponent'
 
@@ -59,20 +60,22 @@ class VideoItemDetail extends Component {
     apiStatus: apiUrlStatusConstant.initial,
     isLike: false,
     isDisLike: false,
+    isSaved: false,
   }
 
   renderSuccess = (isDark, addToSaveVideos) => {
-    const {videoDetail, isLike, isDisLike} = this.state
+    const {videoDetail, isLike, isDisLike, isSaved} = this.state
     const timeDifference = formatDistanceToNow(
       new Date(videoDetail.publishedAt),
     )
     const {videoUrl, title} = videoDetail
     const titleColor = isDark ? '#ffffff' : '#212121'
     const textColor = isDark ? '#94a3b8' : '#64748b'
+    const descriptionColor = isDark ? '#ffffff' : '#616e7c'
 
     let LikeColor = ''
     if (isLike) {
-      LikeColor = '#4f46e5'
+      LikeColor = '#2563eb'
     } else {
       LikeColor = isDark ? '#94a3b8' : '#64748b'
     }
@@ -90,7 +93,7 @@ class VideoItemDetail extends Component {
 
     let DislikeColor = ''
     if (isDisLike) {
-      DislikeColor = '#4f46e5'
+      DislikeColor = '#2563eb'
     } else {
       DislikeColor = isDark ? '#94a3b8' : '#64748b'
     }
@@ -105,8 +108,10 @@ class VideoItemDetail extends Component {
         this.setState(prevState => ({isDisLike: !prevState.isDisLike}))
       }
     }
-
+    const buttonSaveText = isSaved ? 'Saved' : 'Save'
+    const savedColor = isSaved ? '#2563eb' : '#64748b'
     const onClickSave = () => {
+      this.setState(prevState => ({isSaved: !prevState.isSaved}))
       addToSaveVideos(videoDetail)
     }
 
@@ -132,13 +137,29 @@ class VideoItemDetail extends Component {
               </LikeButton>
             </MidContainer>
             <MidContainer onClick={onClickSave}>
-              <MdPlaylistAdd color={textColor} />
-              <LikeButton type="button" color={textColor}>
-                Save
+              <MdPlaylistAdd color={savedColor} />
+              <LikeButton type="button" color={savedColor}>
+                {buttonSaveText}
               </LikeButton>
             </MidContainer>
           </MidContainer>
         </MidContainer>
+        <hr width={1000} />
+        <MidContainer>
+          <Logo
+            src={videoDetail.channel.profile_image_url}
+            alt="channel logo"
+          />
+          <TextContainer>
+            <Text color={titleColor}>{videoDetail.channel.name}</Text>
+            <Text color={textColor}>
+              {videoDetail.channel.subscriber_count} subscribers
+            </Text>
+          </TextContainer>
+        </MidContainer>
+        <Text marginTop={40} marginLeft={63} color={descriptionColor}>
+          {videoDetail.description}
+        </Text>
       </VideoItemDetailContainer>
     )
   }
@@ -151,7 +172,7 @@ class VideoItemDetail extends Component {
     <SideContainer
       width={20}
       isDark={isDark}
-      height={80}
+      height={65}
       justifyContent="space-between"
     >
       <nav>
@@ -214,6 +235,7 @@ class VideoItemDetail extends Component {
     }
     const fetchedVideoItem = await fetch(apiVideoItemUrl, option)
     const videoItemData = await fetchedVideoItem.json()
+    console.log(videoItemData)
     if (fetchedVideoItem.ok) {
       const updatedVideoData = {
         channel: videoItemData.video_details.channel,
@@ -257,7 +279,7 @@ class VideoItemDetail extends Component {
         <EmptyViewImage src={url} alt="failure view" />
         <HeadingFail>Oops! Something Went Wrong</HeadingFail>
         <Reason>
-          We are having some trouble to complete your request. Please try again
+          We are having some trouble to complete your request. Please try again.
         </Reason>
         <RetryButton onClick={onClickRetry} type="button">
           Retry
@@ -298,7 +320,7 @@ class VideoItemDetail extends Component {
                   height={80}
                 >
                   <RightSideBottomContainer
-                    data-testid="trending"
+                    data-testid="videoItemDetails"
                     bgColor={backgroundColor}
                   >
                     {this.renderApiData(isDark, addToSaveVideos)}

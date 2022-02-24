@@ -101,10 +101,11 @@ export const Title = styled.p`
 
 export const Text = styled.p`
   color: ${props => props.color};
-  margin-top: 5px;
+  margin-top: ${props => props.marginTop}px;
   margin-bottom: 5px;
+  margin-left: ${props => props.marginLeft}px;
 `
-export const Container = styled.div``
+
 export const MidContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -115,4 +116,13 @@ export const LikeButton = styled.button`
   background-color: transparent;
   color: ${props => props.color};
   font-weight: bold;
+`
+export const Logo = styled.img`
+  height: 40px;
+  width: 40px;
+  margin-top: 20px;
+`
+export const TextContainer = styled.div`
+  margin-top: 5px;
+  width: 68vw;
 `

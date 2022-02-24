@@ -20,9 +20,19 @@ class App extends Component {
   }
 
   addToSaveVideos = videoDetail => {
-    this.setState(prevState => ({
-      savedVideosList: [...prevState.savedVideosList, videoDetail],
-    }))
+    const {savedVideosList} = this.state
+    const isIncluded = savedVideosList.includes(videoDetail)
+    if (isIncluded) {
+      this.setState(prevState => ({
+        savedVideosList: prevState.savedVideosList.filter(
+          eachSavedVideo => eachSavedVideo.id !== videoDetail.id,
+        ),
+      }))
+    } else {
+      this.setState(prevState => ({
+        savedVideosList: [...prevState.savedVideosList, videoDetail],
+      }))
+    }
   }
 
   render() {

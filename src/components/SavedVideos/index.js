@@ -121,7 +121,7 @@ class SavedVideos extends Component {
           alt="no saved videos"
         />
         <HeadingFail color={color1}>No saved videos found</HeadingFail>
-        <Reason>Save your videos by clicking a button</Reason>
+        <p>Save your videos by clicking a button</p>
       </EmptyViewContainer>
     )
   }
@@ -137,7 +137,7 @@ class SavedVideos extends Component {
           <SideContainer justifyContent="flex-start" width={80} height={80}>
             {this.renderTop(isDark)}
             <RightSideBottomContainer
-              data-testid="trending"
+              data-testid="savedVideos"
               bgColor={backgroundColor}
             >
               <VideoUnorderedList>
