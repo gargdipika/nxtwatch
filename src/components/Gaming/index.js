@@ -201,7 +201,7 @@ class Gaming extends Component {
     return (
       <EmptyViewContainer>
         <EmptyViewImage src={url} alt="failure view" />
-        <HeadingFail>Oops! Something Wen Wrong</HeadingFail>
+        <HeadingFail>Oops! Something Went Wrong</HeadingFail>
         <Reason>
           We are having some trouble to complete your request. Please try again
         </Reason>
@@ -258,7 +258,10 @@ class Gaming extends Component {
                   height={80}
                 >
                   {this.renderTop(isDark)}
-                  <RightSideBottomContainer bgColor={backgroundColor}>
+                  <RightSideBottomContainer
+                    data-testid="gaming"
+                    bgColor={backgroundColor}
+                  >
                     {this.renderApiData(isDark)}
                   </RightSideBottomContainer>
                 </SideContainer>

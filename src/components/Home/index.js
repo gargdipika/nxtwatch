@@ -51,6 +51,18 @@ const apiUrlStatusConstant = {
   failure: 'FAILURE',
 }
 
+const sideBarContent = [
+  {id: 0, icon: <IoMdHome />, title: 'Home', link: '/'},
+  {id: 1, icon: <HiFire />, title: 'Trending', link: '/trending'},
+  {id: 2, icon: <FaGamepad />, title: 'Gaming', link: '/gaming'},
+  {
+    id: 3,
+    icon: <MdPlaylistAdd />,
+    title: 'Saved Videos',
+    link: '/saved-videos',
+  },
+]
+
 class Home extends Component {
   state = {
     searchInput: '',
@@ -58,6 +70,73 @@ class Home extends Component {
     apiStatus: apiUrlStatusConstant.initial,
     showBanner: true,
   }
+
+  renderSideContainer = isDark => (
+    <SideContainer
+      width={20}
+      isDark={isDark}
+      height={80}
+      justifyContent="space-between"
+    >
+      <nav>
+        <UnorderedList>
+          {sideBarContent.map(eachContent => {
+            const {icon} = eachContent
+
+            const isClick = eachContent.id === 0
+            let activeBgColor = 'transparent'
+            let activeColor = ''
+            let fontWeight = 'normal'
+            if (isClick) {
+              activeBgColor = isDark ? '#424242' : '#f1f5f9'
+              activeColor = 'red'
+              fontWeight = 'bold'
+            }
+
+            return (
+              <Link className="link-style" to={eachContent.link}>
+                <ListElement
+                  bgColor={activeBgColor}
+                  key={eachContent.id}
+                  color={activeColor}
+                >
+                  {icon}
+                  <ListItem fontWeight={fontWeight}>
+                    {eachContent.title}
+                  </ListItem>
+                </ListElement>
+              </Link>
+            )
+          })}
+        </UnorderedList>
+      </nav>
+      <div>
+        <SideBarPara isDark={isDark} className="contact-us">
+          CONTACT US
+        </SideBarPara>
+        <div>
+          <MediaLogo
+            className="media-logo"
+            src="https://assets.ccbp.in/frontend/react-js/nxt-watch-facebook-logo-img.png"
+            alt="facebook logo"
+          />
+          <MediaLogo
+            className="media-logo"
+            src="https://assets.ccbp.in/frontend/react-js/nxt-watch-twitter-logo-img.png"
+            alt="twitter logo"
+          />
+          <MediaLogo
+            className="media-logo"
+            src="https://assets.ccbp.in/frontend/react-js/nxt-watch-linked-in-logo-img.png"
+            alt="linked in logo"
+          />
+        </div>
+        <SideBarPara isDark={isDark} className="contact-us">
+          Enjoy! Now to see your channels and recommendations!
+        </SideBarPara>
+      </div>
+    </SideContainer>
+  )
 
   componentDidMount = () => {
     this.getData()
@@ -140,7 +219,7 @@ class Home extends Component {
     return (
       <EmptyViewContainer>
         <EmptyViewImage src={url} alt="failure view" />
-        <HeadingFail>Oops! Something Wen Wrong</HeadingFail>
+        <HeadingFail>Oops! Something Went Wrong</HeadingFail>
         <Reason>
           We are having some trouble to complete your request. Please try again
         </Reason>
@@ -213,75 +292,6 @@ class Home extends Component {
     }
   }
 
-  renderSideContainer = isDark => {
-    console.log(isDark)
-    const color = isDark ? '#606060' : '#383838'
-    const bgColorForListElement = isDark ? '#424242' : '#f1f5f9'
-
-    return (
-      <SideContainer
-        width={20}
-        isDark={isDark}
-        height={80}
-        justifyContent="space-between"
-      >
-        <UnorderedList>
-          <Link className="link-style" to="/">
-            <ListElement bgColor={bgColorForListElement}>
-              <IoMdHome color="red" />
-              <ListItem isDark={isDark} fontWeight="bold">
-                Home
-              </ListItem>
-            </ListElement>
-          </Link>
-          <Link className="link-style" to="/trending">
-            <ListElement>
-              <HiFire color={color} />
-              <ListItem isDark={isDark}>Trending</ListItem>
-            </ListElement>
-          </Link>
-          <Link className="link-style" to="/gaming">
-            <ListElement>
-              <FaGamepad color={color} />
-              <ListItem isDark={isDark}>Gaming</ListItem>
-            </ListElement>
-          </Link>
-          <Link className="link-style" to="/saved-videos">
-            <ListElement>
-              <MdPlaylistAdd color={color} />
-              <ListItem isDark={isDark}>Saved Videos</ListItem>
-            </ListElement>
-          </Link>
-        </UnorderedList>
-        <div>
-          <SideBarPara isDark={isDark} className="contact-us">
-            CONTACT US
-          </SideBarPara>
-          <div>
-            <MediaLogo
-              className="media-logo"
-              src="https://assets.ccbp.in/frontend/react-js/nxt-watch-facebook-logo-img.png"
-              alt="facebook logo"
-            />
-            <MediaLogo
-              className="media-logo"
-              src="https://assets.ccbp.in/frontend/react-js/nxt-watch-twitter-logo-img.png"
-              alt="twitter logo"
-            />
-            <MediaLogo
-              className="media-logo"
-              src="https://assets.ccbp.in/frontend/react-js/nxt-watch-linked-in-logo-img.png"
-              alt="linked in logo"
-            />
-          </div>
-          <SideBarPara isDark={isDark} className="contact-us">
-            Enjoy! Now to see your channels and recommendations!
-          </SideBarPara>
-        </div>
-      </SideContainer>
-    )
-  }
-
   renderBanner = isDark => {
     const bannerImage =
       'https://assets.ccbp.in/frontend/react-js/nxt-watch-banner-bg.png'
@@ -328,7 +338,7 @@ class Home extends Component {
       <ThemeContext.Consumer>
         {value => {
           const {isDark} = value
-          const backgroundColor = isDark ? '#0f0f0f' : '#f8fafc'
+          const backgroundColor = isDark ? '#181818' : '#f8fafc'
           const borderColor = isDark ? ' #606060' : '#d7dfe9'
           const color = isDark ? '#f1f1f1' : '#212121'
 
@@ -343,7 +353,10 @@ class Home extends Component {
                   height={80}
                 >
                   {showBanner && this.renderBanner()}
-                  <RightSideBottomContainer bgColor={backgroundColor}>
+                  <RightSideBottomContainer
+                    data-testid="home"
+                    bgColor={backgroundColor}
+                  >
                     <SearchBar>
                       <SearchInput
                         color={color}

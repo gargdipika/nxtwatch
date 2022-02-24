@@ -49,4 +49,41 @@
 .button {
   border: none;
   background-color: transparent;
+  cursor: pointer;
+}
+.popup-container {
+  background-color: #ffffff;
+  height: 200px;
+  width: 350px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #00306e;
+  font-weight: 500;
+  font-size: 18px;
+}
+.btn {
+  height: 40px;
+  width: 100px;
+  margin-left: 20px;
+  margin-right: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.cancel-button {
+  background-color: transparent;
+  border: solid #cbd5e1 1px;
+  color: #cbd5e1;
+}
+.confirm-button {
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+}
+.darkTheme {
+  background-color: #212121;
+  color: #ffffff;
 }

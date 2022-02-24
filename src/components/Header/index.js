@@ -2,6 +2,7 @@ import {BsBrightnessHigh} from 'react-icons/bs'
 import {withRouter, Link} from 'react-router-dom'
 import Cookies from 'js-cookie'
 import {FaMoon} from 'react-icons/fa'
+import Popup from 'reactjs-popup'
 import ThemeContext from '../../context/ThemeContext'
 import './index.css'
 
@@ -9,6 +10,7 @@ const Header = props => (
   <ThemeContext.Consumer>
     {value => {
       const {isDark, changeTheme} = value
+      const popupContainerStyle = isDark ? 'darkTheme' : ''
       const logoUrl = isDark
         ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-dark-theme-img.png'
         : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png'
@@ -49,9 +51,36 @@ const Header = props => (
               src="https://assets.ccbp.in/frontend/react-js/nxt-watch-profile-img.png"
               alt="profile"
             />
-            <button onClick={onLogout} className={logoutButton} type="button">
-              Logout
-            </button>
+            <Popup
+              modal
+              trigger={
+                <button className={logoutButton} type="button">
+                  Logout
+                </button>
+              }
+            >
+              {close => (
+                <div className={`popup-container ${popupContainerStyle}`}>
+                  <p>Are you sure, you want to logout</p>
+                  <div>
+                    <button
+                      className="btn cancel-button"
+                      type="button"
+                      onClick={() => close()}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="btn confirm-button"
+                      type="button"
+                      onClick={onLogout}
+                    >
+                      Confirm
+                    </button>
+                  </div>
+                </div>
+              )}
+            </Popup>
           </div>
         </nav>
       )

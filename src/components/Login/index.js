@@ -2,6 +2,7 @@ import {Component} from 'react'
 import Cookies from 'js-cookie'
 import {Redirect} from 'react-router-dom'
 import ThemeContext from '../../context/ThemeContext'
+import LoginButton from './styledComponent'
 
 import './index.css'
 
@@ -113,9 +114,9 @@ class Login extends Component {
                       Show Password
                     </label>
                   </div>
-                  <button type="submit" className="login-button">
+                  <LoginButton type="submit" color="#ffffff">
                     Login
-                  </button>
+                  </LoginButton>
                   {isError && <p className="error-message">*{errMsg}</p>}
                 </div>
               </form>
