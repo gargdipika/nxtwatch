@@ -70,7 +70,7 @@ export const VideoThumbNail = styled.img`
   height: 200px;
   width: 350px;
 `
-export const VideoUnorderedList = styled.div`
+export const VideoUnorderedList = styled.ul`
   display: flex;
   flex-wrap: wrap;
 `
@@ -105,9 +105,6 @@ export const EmptyViewImage = styled.img`
 `
 export const HeadingFail = styled.h1`
   color: #212121;
-`
-export const Reason = styled.p`
-  color: #7e858e;
 `
 export const RetryButton = styled.button`
   height: 36px;

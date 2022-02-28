@@ -60,14 +60,18 @@ class VideoItemDetail extends Component {
     apiStatus: apiUrlStatusConstant.initial,
     isLike: false,
     isDisLike: false,
-    isSaved: false,
   }
 
-  renderSuccess = (isDark, addToSaveVideos) => {
-    const {videoDetail, isLike, isDisLike, isSaved} = this.state
+  renderSuccess = (isDark, addToSaveVideos, savedVideosList) => {
+    const {videoDetail, isLike, isDisLike} = this.state
     const timeDifference = formatDistanceToNow(
       new Date(videoDetail.publishedAt),
     )
+    console.log(videoDetail.id)
+    const isSave =
+      savedVideosList.filter(eachVideo => eachVideo.id === videoDetail.id)
+        .length !== 0
+    console.log(isSave)
     const {videoUrl, title} = videoDetail
     const titleColor = isDark ? '#ffffff' : '#212121'
     const textColor = isDark ? '#94a3b8' : '#64748b'
@@ -108,10 +112,9 @@ class VideoItemDetail extends Component {
         this.setState(prevState => ({isDisLike: !prevState.isDisLike}))
       }
     }
-    const buttonSaveText = isSaved ? 'Saved' : 'Save'
-    const savedColor = isSaved ? '#2563eb' : '#64748b'
+    const buttonSaveText = isSave ? 'Saved' : 'Save'
+    const savedColor = isSave ? '#2563eb' : '#64748b'
     const onClickSave = () => {
-      this.setState(prevState => ({isSaved: !prevState.isSaved}))
       addToSaveVideos(videoDetail)
     }
 
@@ -223,7 +226,7 @@ class VideoItemDetail extends Component {
     const {match} = this.props
     const {params} = match
     const {id} = params
-    console.log(id)
+
     this.setState({apiStatus: apiUrlStatusConstant.inProgress})
     const jwtToken = Cookies.get('jwt_token')
     const apiVideoItemUrl = `https://apis.ccbp.in/videos/${id}`
@@ -235,7 +238,7 @@ class VideoItemDetail extends Component {
     }
     const fetchedVideoItem = await fetch(apiVideoItemUrl, option)
     const videoItemData = await fetchedVideoItem.json()
-    console.log(videoItemData)
+
     if (fetchedVideoItem.ok) {
       const updatedVideoData = {
         channel: videoItemData.video_details.channel,
@@ -288,12 +291,12 @@ class VideoItemDetail extends Component {
     )
   }
 
-  renderApiData = (isDark, addToSaveVideos) => {
+  renderApiData = (isDark, addToSaveVideos, savedVideosList) => {
     const {apiStatus} = this.state
 
     switch (apiStatus) {
       case apiUrlStatusConstant.success:
-        return this.renderSuccess(isDark, addToSaveVideos)
+        return this.renderSuccess(isDark, addToSaveVideos, savedVideosList)
       case apiUrlStatusConstant.failure:
         return this.renderFailure(isDark)
       case apiUrlStatusConstant.inProgress:
@@ -307,7 +310,7 @@ class VideoItemDetail extends Component {
     return (
       <ThemeContext.Consumer>
         {value => {
-          const {isDark, addToSaveVideos} = value
+          const {isDark, addToSaveVideos, savedVideosList} = value
           const backgroundColor = isDark ? '#0f0f0f' : '#f8fafc'
           return (
             <>
@@ -323,7 +326,11 @@ class VideoItemDetail extends Component {
                     data-testid="videoItemDetails"
                     bgColor={backgroundColor}
                   >
-                    {this.renderApiData(isDark, addToSaveVideos)}
+                    {this.renderApiData(
+                      isDark,
+                      addToSaveVideos,
+                      savedVideosList,
+                    )}
                   </RightSideBottomContainer>
                 </SideContainer>
               </HomeContainer>

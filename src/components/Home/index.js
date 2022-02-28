@@ -284,7 +284,7 @@ class Home extends Component {
       case apiUrlStatusConstant.success:
         return this.renderSuccess(isDark)
       case apiUrlStatusConstant.failure:
-        return this.renderFailure(isDark)
+        return this.renderFailureView(isDark)
       case apiUrlStatusConstant.inProgress:
         return this.renderLoader(isDark)
       default:

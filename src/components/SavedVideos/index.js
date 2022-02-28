@@ -24,7 +24,6 @@ import {
   Text,
   EmptyViewImage,
   HeadingFail,
-  Reason,
   EmptyViewContainer,
   TopContainer,
   LogoElement,
@@ -121,7 +120,7 @@ class SavedVideos extends Component {
           alt="no saved videos"
         />
         <HeadingFail color={color1}>No saved videos found</HeadingFail>
-        <p>Save your videos by clicking a button</p>
+        <p>You can save your videos while watching them</p>
       </EmptyViewContainer>
     )
   }

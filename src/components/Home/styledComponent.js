@@ -129,7 +129,7 @@ export const VideoThumbNail = styled.img`
   height: 150px;
   width: 312px;
 `
-export const VideoUnorderedList = styled.div`
+export const VideoUnorderedList = styled.ul`
   display: flex;
   flex-wrap: wrap;
 `

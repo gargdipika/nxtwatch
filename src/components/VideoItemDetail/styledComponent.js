@@ -54,7 +54,7 @@ export const RightSideBottomContainer = styled.div`
   background-color: ${props => props.bgColor};
   padding-left: 20px;
 `
-export const VideoUnorderedList = styled.div`
+export const VideoUnorderedList = styled.ul`
   display: flex;
   flex-wrap: wrap;
 `

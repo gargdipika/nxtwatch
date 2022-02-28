@@ -70,7 +70,7 @@ export const VideoThumbNail = styled.img`
   height: 200px;
   width: 350px;
 `
-export const VideoUnorderedList = styled.div`
+export const VideoUnorderedList = styled.ul`
   display: flex;
   flex-wrap: wrap;
 `
